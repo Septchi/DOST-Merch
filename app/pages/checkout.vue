@@ -19,7 +19,6 @@
           v-model="state.email"
           type="email"
           placeholder="you@example.com"
-          :error="errors.email"
           required
         />
         </UFormField>
@@ -28,10 +27,10 @@
         <div class="mb-4">
           <label class="block text-gray-700 font-medium mb-1">Proof of Payment</label>
           <UInput
-          v-model="state.proofOfPayment"
             type="file"
             accept="image/*"
             class="w-full"
+            @change="handleFileChange"
             required
           />
         </div>
@@ -39,7 +38,7 @@
         <!-- Preview -->
         <div v-if="state.proofOfPayment" class="mb-4">
           <p class="text-gray-600 mb-1">Preview:</p>
-          <img :src="state.proofOfPayment" alt="Proof Preview" class="w-full rounded border border-gray-300" />
+          <img :src="imagePreview" alt="Proof Preview" class="w-full rounded border border-gray-300" />
         </div>
 
         <!-- Submit -->
@@ -78,7 +77,18 @@ const state = reactive<Partial<Schema>>({
   email: '',
   proofOfPayment: null as File | null
 })
+const imagePreview = ref<string | null>(null);
+function handleFileChange(event: Event){
+  const target = event.target as HTMLInputElement
+  const file = target.files?.[0] ?? null
 
+  if (file) {
+    state.proofOfPayment = file
+    imagePreview.value = URL.createObjectURL(file)
+  } 
+  else
+    imagePreview.value = null
+}
 async function onSubmit(event: FormSubmitEvent<Schema>) {
   console.log("bruh");
 }
