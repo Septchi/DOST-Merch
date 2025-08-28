@@ -1,1 +1,138 @@
 @import "tailwindcss";
+@import "@nuxt/ui";
+
+@theme static {
+  --font-sans: 'Public Sans', sans-serif;
+
+  --breakpoint-3xl: 1920px;
+
+  /* Eerie Black */
+  --color-eerie-black-50: #f4f4f4;
+  --color-eerie-black-100: #dcdcdc;
+  --color-eerie-black-200: #b3b3b3;
+  --color-eerie-black-300: #8a8a8a;
+  --color-eerie-black-400: #5f5f5f;
+  --color-eerie-black-500: #383838;
+  --color-eerie-black-600: #2e2e2e;
+  --color-eerie-black-700: #262626;
+  --color-eerie-black-800: #212224;
+  --color-eerie-black-900: #1a1a1a;
+  --color-eerie-black-950: #121212;
+
+  /* Jet Dark */
+  --color-jet-dark-50: #f5f5f6;
+  --color-jet-dark-100: #dfe0e1;
+  --color-jet-dark-200: #b8babd;
+  --color-jet-dark-300: #909399;
+  --color-jet-dark-400: #686d73;
+  --color-jet-dark-500: #43474e;
+  --color-jet-dark-600: #35383e;
+  --color-jet-dark-700: #2c2f34;
+  --color-jet-dark-800: #282b2f;
+  --color-jet-dark-900: #1e2023;
+  --color-jet-dark-950: #141618;
+
+  /* Jet */
+  --color-jet-50: #f6f6f7;
+  --color-jet-100: #e1e2e3;
+  --color-jet-200: #c3c4c6;
+  --color-jet-300: #9fa1a5;
+  --color-jet-400: #797c82;
+  --color-jet-500: #50545a;
+  --color-jet-600: #3f4349;
+  --color-jet-700: #34373c;
+  --color-jet-800: #2f3035;
+  --color-jet-900: #232428;
+  --color-jet-950: #16181b;
+
+  /* Charcoal */
+  --color-charcoal-50: #f4f5f6;
+  --color-charcoal-100: #dcdfe2;
+  --color-charcoal-200: #c2c5ca;
+  --color-charcoal-300: #9ca0a8;
+  --color-charcoal-400: #787c85;
+  --color-charcoal-500: #545962;
+  --color-charcoal-600: #43474f;
+  --color-charcoal-700: #383b41;
+  --color-charcoal-800: #40444b;
+  --color-charcoal-900: #2a2d32;
+  --color-charcoal-950: #1a1c1f;
+
+  /* Payne's Gray */
+  --color-paynes-gray-50: #f3f4f6;
+  --color-paynes-gray-100: #dce0e5;
+  --color-paynes-gray-200: #bcc3cc;
+  --color-paynes-gray-300: #99a1ab;
+  --color-paynes-gray-400: #7a828e;
+  --color-paynes-gray-500: #5c6672;
+  --color-paynes-gray-600: #4a525d;
+  --color-paynes-gray-700: #3f464f;
+  --color-paynes-gray-800: #575d69;
+  --color-paynes-gray-900: #30343b;
+  --color-paynes-gray-950: #1f2226;
+
+  /* Slate Gray */
+  --color-slate-gray-50: #f4f6f8;
+  --color-slate-gray-100: #dde1e7;
+  --color-slate-gray-200: #c1c8d1;
+  --color-slate-gray-300: #a1aab6;
+  --color-slate-gray-400: #848fa0;
+  --color-slate-gray-500: #687385;
+  --color-slate-gray-600: #535e6d;
+  --color-slate-gray-700: #474f5d;
+  --color-slate-gray-800: #7c8391;
+  --color-slate-gray-900: #363c45;
+  --color-slate-gray-950: #24272e;
+
+  /* French Gray */
+  --color-french-gray-50: #f6f8fa;
+  --color-french-gray-100: #e3e7ee;
+  --color-french-gray-200: #ccd4de;
+  --color-french-gray-300: #acb6c5;
+  --color-french-gray-400: #8e9dad;
+  --color-french-gray-500: #748394;
+  --color-french-gray-600: #5d6a79;
+  --color-french-gray-700: #4f5b67;
+  --color-french-gray-800: #b8c0ce;
+  --color-french-gray-900: #333840;
+  --color-french-gray-950: #212429;
+
+  /* Steel Navy */
+  --color-steel-navy-50: #f3f5f9;
+  --color-steel-navy-100: #dbe0ec;
+  --color-steel-navy-200: #bbc4d6;
+  --color-steel-navy-300: #96a2bb;
+  --color-steel-navy-400: #7887a3;
+  --color-steel-navy-500: #5e6d8a;
+  --color-steel-navy-600: #4b5871;
+  --color-steel-navy-700: #3f4a5e;
+  --color-steel-navy-800: #37455e;
+  --color-steel-navy-900: #2b3649;
+  --color-steel-navy-950: #1d2431;
+
+  /* YInMn Blue */
+  --color-ynmn-blue-50: #f0f4fa;
+  --color-ynmn-blue-100: #d7e2f2;
+  --color-ynmn-blue-200: #b5c8e6;
+  --color-ynmn-blue-300: #90aad9;
+  --color-ynmn-blue-400: #6b8fcf;
+  --color-ynmn-blue-500: #557ac1;
+  --color-ynmn-blue-600: #4564a3;
+  --color-ynmn-blue-700: #3b5487;
+  --color-ynmn-blue-800: #445e8c;
+  --color-ynmn-blue-900: #2c3e5b;
+  --color-ynmn-blue-950: #1c273a;
+
+  /* Vista Blue */
+  --color-vista-blue-50: #edf4fe;
+  --color-vista-blue-100: #d3e3fc;
+  --color-vista-blue-200: #aacaf7;
+  --color-vista-blue-300: #84aff1;
+  --color-vista-blue-400: #6699ec;
+  --color-vista-blue-500: #4c83e1;
+  --color-vista-blue-600: #3f6dc4;
+  --color-vista-blue-700: #355aa4;
+  --color-vista-blue-800: #81a2dd;
+  --color-vista-blue-900: #29406e;
+  --color-vista-blue-950: #1b2947;
+}
