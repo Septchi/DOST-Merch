@@ -1,7 +1,14 @@
 <template>
   <NuxtRouteAnnouncer />
   <NuxtLoadingIndicator />
-
+<div
+    v-if="loading"
+    class="fixed inset-0 z-50 flex items-center justify-center bg-white"
+  >
+    <span class="text-2xl font-bold text-blue-600 animate-pulse">
+      Loading...
+    </span>
+  </div>
   <UApp>
     <NuxtLayout>
       <NuxtPage />
@@ -10,28 +17,9 @@
 </template>
 
 <script setup>
-import { defineStore } from 'pinia'
-
-type cartItem = {
-  name: string,
-  price: number,
-  quantity: number
-}
-export const useCartStore = defineStore('cart', {
-  state: ()=> ({
-    items: [] as {name: string, price: number, quantity: number}[]
-  }),
-  actions: {
-    add(item: cartItem) {
-      const exist = this.items.find(i=>i.name === item.name);
-      if(exist) exist.quantity++;
-      else this.items.push(item);
-    },
-    clear(){
-      this.items = []
-    }
-  }
-})
+const loading = ref(true);
 onMounted(async () => {
+  await nextTick()
+  loading.value = false;
 })
 </script>
