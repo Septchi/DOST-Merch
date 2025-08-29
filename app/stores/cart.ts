@@ -3,6 +3,7 @@ import { defineStore } from 'pinia'
 type Item = {
   name: string,
   description: string,
+  size: string,
   price: number,
 }
 type cartItem = {

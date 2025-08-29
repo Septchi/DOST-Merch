@@ -47,6 +47,12 @@
           <h3 class="text-lg font-semibold">{{ item.name }}</h3>
           <p>{{ item.description }}</p>
           <p class="text-xl font-bold mt-2">₱{{ item.price }}</p>
+          <div v-if="item.name != 'Lanyard'">
+          <h4 class="text-lg font-semibold">Size</h4>
+          <div  class="flex gap-2">
+            <UButton v-for="size in sizes" :label="size" :variant="getCurrentButton(item.size, size)" @click="setButtonSize(item.name, size)" class="rounded-lg"></UButton>
+          </div>
+          </div>
           <button @click="store.add(item)" class="mt-4 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Add
             to Cart</button>
         </div>
@@ -75,7 +81,7 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang='ts'>
 import { useCartStore } from '@/stores/cart';
 import { useRouter } from 'vue-router';
 
@@ -83,59 +89,79 @@ const router = useRouter()
 const store = useCartStore()
 const showCartModal = ref(false)
 
+const sizes = ['XS', 'S', 'M', 'L', 'XL'];
+
 const combos = [
   {
     name: 'Combo 1: Shirt + Lanyard',
     description: 'Cotton Shirt and Lanyard bundle',
     price: 420,
+    size: 'XS',
     images: ['/images/cotton_shirt.jpg', '/images/lanyard.jpg']
   },
   {
     name: 'Combo 2: Polo + Lanyard',
     description: 'Cotton Polo Shirt and Lanyard bundle',
     price: 620,
+    size: 'XS',
     images: ['/images/cotton_polo.jpg', '/images/lanyard.jpg']
   },
   {
     name: 'Combo 3: Polo + Shirt',
     description: 'Cotton Polo Shirt and Cotton Shirt bundle',
     price: 850,
+    size: 'XS',
     images: ['/images/cotton_polo.jpg', '/images/cotton_shirt.jpg']
   },
   {
     name: 'Combo 4: Polo + Shirt + Lanyard',
     description: 'Complete bundle with Polo, Shirt, and Lanyard',
     price: 900,
+    size: ['XS', 'XS'],
     images: ['/images/cotton_polo.jpg', '/images/cotton_shirt.jpg', '/images/lanyard.jpg']
   }
 ]
 
-const items = [
+const items = ref([
   {
     name: 'Cotton Polo Shirt',
     description: 'Comfortable cotton polo shirt',
     price: 550,
+    size: 'XS',
     image: '/images/cotton_polo.jpg'
   },
   {
     name: 'Cotton Shirt',
     description: 'Lightweight cotton shirt',
     price: 350,
+    size: 'XS',
     image: '/images/cotton_shirt.jpg'
   },
   {
     name: 'Lanyard',
     description: 'Durable lanyard for everyday use',
     price: 120,
+    size: 'XS',
     image: '/images/lanyard.jpg'
   },
   {
     name: 'Sublimation Jersey',
     description: 'Vibrant sublimation jersey',
     price: 350,
+    size: 'XS',
     image: '/images/sublimation_shirt.png'
   }
-]
+])
+
+function getCurrentButton(size: string, button: string){
+  return button === size ? 'subtle' : 'ghost';
+}
+
+function setButtonSize(name: string, size: string){
+  const item = items.value.find(item => item.name === name);
+  if(item)
+    item.size = size;
+}
 
 onMounted(() => {
   store.loadSession();
