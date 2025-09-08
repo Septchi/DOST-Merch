@@ -31,8 +31,10 @@
 
           <p class="font-bold text-xl text-blue-800">Total: ₱{{ store.total }}</p>
           <div class="flex justify-between">
-          <UButton label="Clear" color="primary" variant="soft" class="mt-4 w-auto px-2 justify-center" @click="store.clear()"/>
-          <UButton label="Checkout" color="primary" variant="soft" class="mt-4 w-auto px-2 justify-center" @click="router.push('/checkout')"/>
+            <UButton label="Clear" color="primary" variant="soft" class="mt-4 w-auto px-2 justify-center"
+              @click="store.clear()" />
+            <UButton label="Checkout" color="primary" variant="soft" class="mt-4 w-auto px-2 justify-center"
+              @click="router.push('/checkout')" />
           </div>
         </div>
       </template>
@@ -48,10 +50,11 @@
           <p>{{ item.description }}</p>
           <p class="text-xl font-bold mt-2">₱{{ item.price }}</p>
           <div v-if="item.name != 'Lanyard'">
-          <h4 class="text-lg font-semibold">Size</h4>
-          <div  class="flex gap-2">
-            <UButton v-for="size in sizes" :label="size" :variant="getCurrentButton(item.size, size)" @click="setButtonSize(item.name, size)" class="rounded-lg"></UButton>
-          </div>
+            <h4 class="text-lg font-semibold">Size</h4>
+            <div class="flex gap-2">
+              <UButton v-for="size in sizes" :label="size" :variant="getCurrentButton(item.size, size)"
+                @click="item.setSize(size)" class="rounded-lg"></UButton>
+            </div>
           </div>
           <button @click="store.add(item)" class="mt-4 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Add
             to Cart</button>
@@ -65,18 +68,20 @@
       <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
         <div v-for="combo in combos" :key="combo.name" class="p-4 rounded-lg shadow hover:shadow-lg transition">
           <div class="flex justify-center gap-2 mb-4">
-            <UCarousel v-slot="{ item }" :items="combo.images" dots class="w-full mb-4 rounded-lg">
-              <img :src="item" class="h-48 object-cover rounded-lg" alt="Carousel image" />
+            <UCarousel v-slot="{ item }" :items="combo.items" dots class="w-full mb-4 rounded-lg">
+              <img :src="item.image" class="h-48 object-cover rounded-lg" alt="Carousel image" />
             </UCarousel>
           </div>
           <h3 class="text-lg font-semibold">{{ combo.name }}</h3>
           <p>{{ combo.description }}</p>
           <p class="text-xl font-bold mt-2">₱{{ combo.price }}</p>
-          <div v-for="shirt in combo.size" class="flex gap-2 my-1">
-            <UButton v-for="size in sizes" :label="size" :variant="getCurrentButton(shirt, size)" @click="setButtonSize(shirt, size)" class="rounded-lg"></UButton>
+          <div v-for="shirt in combo.items.filter(item => item.size != null)" class="flex gap-2 my-1">
+            <UButton v-for="size in sizes" :label="size" :variant="getCurrentButton(shirt.size, size)"
+              @click="shirt.setSize(size)" class="rounded-lg"></UButton>
           </div>
           <button @click="store.add(combo)" class="mt-4 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Add
-            to Cart</button>
+            to
+            Cart</button>
         </div>
       </div>
     </section>
@@ -94,81 +99,95 @@ const showCartModal = ref(false)
 
 const sizes = ['XS', 'S', 'M', 'L', 'XL'];
 
-const combos = ref([
+class Item {
+  constructor(
+    public name: string,
+    public description: string,
+    public price: number,
+    public size: string | null,
+    public image: string,
+  ) { }
+
+  setSize(size: string) {
+    console.log("hello");
+    this.size = size;
+  }
+}
+
+const copyItem = (item: Item) => new Item(item.name, item.description, item.price, item.size, item.image)
+interface Combo {
+  name: string,
+  price: number,
+  items: Item[];
+}
+
+const items: Ref<Item[]> = ref([
+  new Item(
+    'Cotton Polo Shirt',
+    'Comfortable cotton polo shirt',
+    550,
+    'XS',
+    '/images/cotton_polo.jpg'
+  ),
+  new Item(
+    'Cotton Shirt',
+    'Lightweight cotton shirt',
+    350,
+    'XS',
+    '/images/cotton_shirt.jpg'
+  ),
+  new Item(
+    'Lanyard',
+    'Durable lanyard for everyday use',
+    120,
+    null,
+    '/images/lanyard.jpg'
+  ),
+  new Item(
+    'Sublimation Jersey',
+    'Vibrant sublimation jersey',
+    350,
+    'XS',
+    '/images/sublimation_shirt.png'
+  )
+])
+const combos: Ref<Combo[]> = ref([
   {
     name: 'Combo 1: Shirt + Lanyard',
-    description: 'Cotton Shirt and Lanyard bundle',
     price: 420,
-    size: ['XS'],
-    images: ['/images/cotton_shirt.jpg', '/images/lanyard.jpg']
+    items: [copyItem(items.value[1]), copyItem(items.value[2])]
   },
   {
     name: 'Combo 2: Polo + Lanyard',
-    description: 'Cotton Polo Shirt and Lanyard bundle',
     price: 620,
-    size: ['XS'],
-    images: ['/images/cotton_polo.jpg', '/images/lanyard.jpg']
+    items: [copyItem(items.value[0]), copyItem(items.value[2])]
   },
   {
     name: 'Combo 3: Polo + Shirt',
-    description: 'Cotton Polo Shirt and Cotton Shirt bundle',
     price: 850,
-    size: ['XS', 'XS'],
-    images: ['/images/cotton_polo.jpg', '/images/cotton_shirt.jpg']
+    items: [copyItem(items.value[0]), copyItem(items.value[1])]
   },
   {
     name: 'Combo 4: Polo + Shirt + Lanyard',
-    description: 'Complete bundle with Polo, Shirt, and Lanyard',
     price: 900,
-    size: ['XS', 'XS'],
-    images: ['/images/cotton_polo.jpg', '/images/cotton_shirt.jpg', '/images/lanyard.jpg']
-  }
-]) 
-
-const items = ref([
-  {
-    name: 'Cotton Polo Shirt',
-    description: 'Comfortable cotton polo shirt',
-    price: 550,
-    size: 'XS',
-    image: '/images/cotton_polo.jpg'
-  },
-  {
-    name: 'Cotton Shirt',
-    description: 'Lightweight cotton shirt',
-    price: 350,
-    size: 'XS',
-    image: '/images/cotton_shirt.jpg'
-  },
-  {
-    name: 'Lanyard',
-    description: 'Durable lanyard for everyday use',
-    price: 120,
-    size: 'XS',
-    image: '/images/lanyard.jpg'
-  },
-  {
-    name: 'Sublimation Jersey',
-    description: 'Vibrant sublimation jersey',
-    price: 350,
-    size: 'XS',
-    image: '/images/sublimation_shirt.png'
+    items: [copyItem(items.value[0]), copyItem(items.value[1]), copyItem(items.value[2])]
   }
 ])
 
-function getCurrentButton(size: string, button: string){
+
+function getCurrentButton(size: string, button: string) {
   return button === size ? 'subtle' : 'ghost';
 }
 
-function setButtonSize(name: string, size: string){
+function setButtonSize(name: string, size: string) {
   const item = items.value.find(item => item.name === name);
-  if(item)
+  if (item)
     item.size = size;
 }
 
-function setComboButtonSize(name: string, index: number, size: string){
+function setComboButtonSize(name: string, index: number, size: string) {
   const item = combos.value.find(item => item.name === name);
-  if(item)
+  if (item)
     item.size[index] = size;
 }
 

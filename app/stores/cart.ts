@@ -1,18 +1,24 @@
 import { defineStore } from 'pinia'
 
-type Item = {
+interface Item {
   name: string,
-  description: string,
   size: string,
   price: number,
 }
-type cartItem = {
+
+interface Item {
+  name: string,
+  size: string,
+  price: number,
+}
+
+interface cartItem {
   name: string,
   price: number,
   quantity: number
 };
 export const useCartStore = defineStore('cart', {
-  state: ()=> ({
+  state: () => ({
     items: [] as cartItem[]
   }),
   getters: {
@@ -21,12 +27,12 @@ export const useCartStore = defineStore('cart', {
   },
   actions: {
     add(item: Item) {
-      const exist = this.items.find(i=>i.name === item.name);
-      if(exist) exist.quantity++;
-      else this.items.push({name: item.name, price: item.price, quantity: 1});
+      const exist = this.items.find(i => i.name === item.name);
+      if (exist) exist.quantity++;
+      else this.items.push({ name: item.name, price: item.price, quantity: 1 });
       this.saveSession();
     },
-    clear(){
+    clear() {
       this.items = []
       this.saveSession();
     },
@@ -35,7 +41,7 @@ export const useCartStore = defineStore('cart', {
     },
     loadSession() {
       const data = sessionStorage.getItem('cart', JSON.stringify(this.items));
-      if(data)
+      if (data)
         this.items = JSON.parse(data);
     },
   }
