@@ -72,6 +72,9 @@
           <h3 class="text-lg font-semibold">{{ combo.name }}</h3>
           <p>{{ combo.description }}</p>
           <p class="text-xl font-bold mt-2">₱{{ combo.price }}</p>
+          <div v-for="shirt in combo.size" class="flex gap-2 my-1">
+            <UButton v-for="size in sizes" :label="size" :variant="getCurrentButton(shirt, size)" @click="setButtonSize(shirt, size)" class="rounded-lg"></UButton>
+          </div>
           <button @click="store.add(combo)" class="mt-4 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Add
             to Cart</button>
         </div>
@@ -91,26 +94,26 @@ const showCartModal = ref(false)
 
 const sizes = ['XS', 'S', 'M', 'L', 'XL'];
 
-const combos = [
+const combos = ref([
   {
     name: 'Combo 1: Shirt + Lanyard',
     description: 'Cotton Shirt and Lanyard bundle',
     price: 420,
-    size: 'XS',
+    size: ['XS'],
     images: ['/images/cotton_shirt.jpg', '/images/lanyard.jpg']
   },
   {
     name: 'Combo 2: Polo + Lanyard',
     description: 'Cotton Polo Shirt and Lanyard bundle',
     price: 620,
-    size: 'XS',
+    size: ['XS'],
     images: ['/images/cotton_polo.jpg', '/images/lanyard.jpg']
   },
   {
     name: 'Combo 3: Polo + Shirt',
     description: 'Cotton Polo Shirt and Cotton Shirt bundle',
     price: 850,
-    size: 'XS',
+    size: ['XS', 'XS'],
     images: ['/images/cotton_polo.jpg', '/images/cotton_shirt.jpg']
   },
   {
@@ -120,7 +123,7 @@ const combos = [
     size: ['XS', 'XS'],
     images: ['/images/cotton_polo.jpg', '/images/cotton_shirt.jpg', '/images/lanyard.jpg']
   }
-]
+]) 
 
 const items = ref([
   {
@@ -161,6 +164,12 @@ function setButtonSize(name: string, size: string){
   const item = items.value.find(item => item.name === name);
   if(item)
     item.size = size;
+}
+
+function setComboButtonSize(name: string, index: number, size: string){
+  const item = combos.value.find(item => item.name === name);
+  if(item)
+    item.size[index] = size;
 }
 
 onMounted(() => {
