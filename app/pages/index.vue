@@ -99,27 +99,8 @@ const showCartModal = ref(false)
 
 const sizes = ['XS', 'S', 'M', 'L', 'XL'];
 
-class Item {
-  constructor(
-    public name: string,
-    public description: string,
-    public price: number,
-    public size: string | null,
-    public image: string,
-  ) { }
-
-  setSize(size: string) {
-    console.log("hello");
-    this.size = size;
-  }
-}
 
 const copyItem = (item: Item) => new Item(item.name, item.description, item.price, item.size, item.image)
-interface Combo {
-  name: string,
-  price: number,
-  items: Item[];
-}
 
 const items: Ref<Item[]> = ref([
   new Item(

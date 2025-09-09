@@ -1,9 +1,24 @@
 import { defineStore } from 'pinia'
 
-interface Item {
+class Item {
+  constructor(
+    public name: string,
+    public description: string,
+    public price: number,
+    public size: string | null,
+    public image: string,
+  ) { }
+
+  setSize(size: string) {
+    console.log("hello");
+    this.size = size;
+  }
+}
+
+interface Combo {
   name: string,
-  size: string,
   price: number,
+  items: Item[];
 }
 
 interface Item {
@@ -12,24 +27,26 @@ interface Item {
   price: number,
 }
 
-interface cartItem {
+interface ComboItem {
   name: string,
   price: number,
-  quantity: number
-};
+  items: Items[]
+}
+
+type  cartProduct = Item | ComboItem
+
 export const useCartStore = defineStore('cart', {
   state: () => ({
-    items: [] as cartItem[]
+    items: [] as cartProduct[]
   }),
   getters: {
-    count: (state) => state.items.reduce((total, item) => total + item.quantity, 0),
-    total: (state) => state.items.reduce((total, item) => total + item.price * item.quantity, 0),
+    count: (state) => state.items.reduce((total, item) => total + 1, 0),
+    total: (state) => state.items.reduce((total, item) => total + item.price, 0),
   },
   actions: {
-    add(item: Item) {
-      const exist = this.items.find(i => i.name === item.name);
-      if (exist) exist.quantity++;
-      else this.items.push({ name: item.name, price: item.price, quantity: 1 });
+    add(item: cartProduct) {
+      console.log("hello");
+      this.items.push({...item});
       this.saveSession();
     },
     clear() {
