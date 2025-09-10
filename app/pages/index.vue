@@ -53,7 +53,7 @@
             <h4 class="text-lg font-semibold">Size</h4>
             <div class="flex gap-2">
               <UButton v-for="size in sizes" :label="size" :variant="getCurrentButton(item.size, size)"
-                @click="item.setSize(size)" class="rounded-lg"></UButton>
+                @click="item.size = size" class="rounded-lg"></UButton>
             </div>
           </div>
           <button @click="store.add(item)" class="mt-4 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Add
@@ -77,7 +77,7 @@
           <p class="text-xl font-bold mt-2">₱{{ combo.price }}</p>
           <div v-for="shirt in combo.items.filter(item => item.size != null)" class="flex gap-2 my-1">
             <UButton v-for="size in sizes" :label="size" :variant="getCurrentButton(shirt.size, size)"
-              @click="shirt.setSize(size)" class="rounded-lg"></UButton>
+              @click="shirt.size = size" class="rounded-lg"></UButton>
           </div>
           <button @click="store.add(combo)" class="mt-4 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Add
             to
@@ -92,6 +92,7 @@
 <script setup lang='ts'>
 import { useCartStore } from '@/stores/cart';
 import { useRouter } from 'vue-router';
+import type { Item, Combo } from '@/types/types';
 
 const router = useRouter()
 const store = useCartStore()
@@ -100,58 +101,58 @@ const showCartModal = ref(false)
 const sizes = ['XS', 'S', 'M', 'L', 'XL'];
 
 
-const copyItem = (item: Item) => new Item(item.name, item.description, item.price, item.size, item.image)
+// const copyItem = (item: Item) => new Item(item.name, item.description, item.price, item.size, item.image)
 
 const items: Ref<Item[]> = ref([
-  new Item(
-    'Cotton Polo Shirt',
-    'Comfortable cotton polo shirt',
-    550,
-    'XS',
-    '/images/cotton_polo.jpg'
-  ),
-  new Item(
-    'Cotton Shirt',
-    'Lightweight cotton shirt',
-    350,
-    'XS',
-    '/images/cotton_shirt.jpg'
-  ),
-  new Item(
-    'Lanyard',
-    'Durable lanyard for everyday use',
-    120,
-    null,
-    '/images/lanyard.jpg'
-  ),
-  new Item(
-    'Sublimation Jersey',
-    'Vibrant sublimation jersey',
-    350,
-    'XS',
-    '/images/sublimation_shirt.png'
-  )
+  {
+    name: 'Cotton Polo Shirt',
+    description: 'Comfortable cotton polo shirt',
+    price: 550,
+    size: 'XS',
+    image: '/images/cotton_polo.jpg'
+  },
+  {
+    name: 'Cotton Shirt',
+    description: 'Lightweight cotton shirt',
+    price: 350,
+    size: 'XS',
+    image: '/images/cotton_shirt.jpg'
+  },
+  {
+    name: 'Lanyard',
+    description: 'Durable lanyard for everyday use',
+    price: 120,
+    size: null,
+    image: '/images/lanyard.jpg'
+  },
+  {
+    name: 'Sublimation Jersey',
+    description: 'Vibrant sublimation jersey',
+    price: 350,
+    size: 'XS',
+    image: '/images/sublimation_shirt.png'
+  }
 ])
 const combos: Ref<Combo[]> = ref([
   {
     name: 'Combo 1: Shirt + Lanyard',
     price: 420,
-    items: [copyItem(items.value[1]), copyItem(items.value[2])]
+    items: [{ ...items.value[1] }, { ...items.value[2] }]
   },
   {
     name: 'Combo 2: Polo + Lanyard',
     price: 620,
-    items: [copyItem(items.value[0]), copyItem(items.value[2])]
+    items: [{ ...items.value[0] }, { ...items.value[2] }]
   },
   {
     name: 'Combo 3: Polo + Shirt',
     price: 850,
-    items: [copyItem(items.value[0]), copyItem(items.value[1])]
+    items: [{ ...items.value[0] }, { ...items.value[1] }]
   },
   {
     name: 'Combo 4: Polo + Shirt + Lanyard',
     price: 900,
-    items: [copyItem(items.value[0]), copyItem(items.value[1]), copyItem(items.value[2])]
+    items: [{ ...items.value[0] }, { ...items.value[1] }, { ...items.value[2] }]
   }
 ])
 
