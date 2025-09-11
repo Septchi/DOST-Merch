@@ -4,14 +4,12 @@ export interface Item {
   price: number,
   size: string | null,
   image: string,
-  toCart(): ItemCart;
 }
 
 export interface Combo {
   name: string,
   price: number,
   items: Item[];
-  toCart(): ComboCart;
 }
 
 export interface ItemCart {

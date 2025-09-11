@@ -2,6 +2,8 @@ import { defineStore } from 'pinia'
 import type { Item, Combo, ItemCart, ComboCart, CartProduct } from '@/types/types';
 
 
+const itemToCart = (item: Item) => {name: Item.name, size: Item.size, price: Item.price} 
+const ComboToCart = (combo: Combo) => {name: combo.name, price: combo.price, items: combo.items} 
 export const useCartStore = defineStore('cart', {
   state: () => ({
     items: [] as CartProduct[]
@@ -12,7 +14,11 @@ export const useCartStore = defineStore('cart', {
   },
   actions: {
     add(item: Item | Combo) {
-      console.log("hello");
+      let product;
+      if(typeof item === 'Item')
+        product = itemToCart(item)
+      if(typeof item === 'Combo')
+        product = comboToCart(item)
       this.items.push({ ...item });
       this.saveSession();
     },
