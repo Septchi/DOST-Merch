@@ -1,6 +1,6 @@
 <template>
-  <div class="min-h-screen bg-gray-100 flex items-center justify-center p-4">
-    <div class="bg-white shadow-lg rounded-lg w-full max-w-md p-6">
+  <div class="min-h-screen bg-gray-100 flex items-center justify-center p-12">
+    <div class="bg-white shadow-lg rounded-lg w-full  p-6">
       <h1 class="text-2xl font-bold mb-4 text-center">Checkout</h1>
 
       <UForm :schema="checkoutSchema" :state="state" @submit="onSubmit" class="flex flex-col">

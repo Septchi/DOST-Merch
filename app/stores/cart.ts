@@ -1,9 +1,10 @@
 import { defineStore } from 'pinia'
 import type { Item, Combo, ItemCart, ComboCart, CartProduct } from '@/types/types';
 
+const itemToCart = (item: Item): ItemCart => ({type: 'item', name: item.name, size: item.size, price: item.price} )
+const comboToCart = (combo: Combo): ComboCart => ({type: 'combo', name: combo.name, price: combo.price, items: combo.items.map(item => itemToCart(item))})
 
-const itemToCart = (item: Item) => {name: Item.name, size: Item.size, price: Item.price} 
-const ComboToCart = (combo: Combo) => {name: combo.name, price: combo.price, items: combo.items} 
+
 export const useCartStore = defineStore('cart', {
   state: () => ({
     items: [] as CartProduct[]
@@ -13,13 +14,14 @@ export const useCartStore = defineStore('cart', {
     total: (state) => state.items.reduce((total, item) => total + item.price, 0),
   },
   actions: {
-    add(item: Item | Combo) {
-      let product;
-      if(typeof item === 'Item')
-        product = itemToCart(item)
-      if(typeof item === 'Combo')
-        product = comboToCart(item)
-      this.items.push({ ...item });
+    add(product: Product) {
+      if(product.type === 'item')
+        this.items.push(itemToCart(product))
+      if(product.type === 'combo')
+        this.items.push(comboToCart(product))
+      else
+        console.log("rorrs of e: ", product)
+      console.log(this.items[this.items.length - 1])
       this.saveSession();
     },
     clear() {
@@ -30,7 +32,7 @@ export const useCartStore = defineStore('cart', {
       sessionStorage.setItem('cart', JSON.stringify(this.items));
     },
     loadSession() {
-      const data = sessionStorage.getItem('cart', JSON.stringify(this.items));
+      const data = sessionStorage.getItem('cart');
       if (data)
         this.items = JSON.parse(data);
     },

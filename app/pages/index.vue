@@ -23,9 +23,15 @@
 
           <p v-if="store.count === 0" class="text-lg">Your cart is empty.</p>
           <ul v-else class="space-y-3 mb-4 max-h-64 overflow-y-auto">
-            <li v-for="(item, index) in store.items" :key="index" class="flex justify-between text-lg">
-              <span>{{ item.name }} (x{{ item.quantity }})</span>
-              <span class="font-semibold">₱{{ item.price * item.quantity }}</span>
+            <li v-for="(product, index) in store.items" :key="index" class="flex justify-between text-lg">
+              <span v-if="product.type === 'item'">{{ product.name }} {{product.size != null ? `(${product.size})` : ''}}</span>
+              <div v-else>
+                <span>{{product.name}}:</span>
+                <div class="flex flex-col pl-2">
+                  <span v-for="item in product.items">{{item.name}} {{item.size != null ? `(${item.size})` : ''}}</span>
+                </div>
+              </div>
+              <span class="font-semibold">₱{{product.price }}</span>
             </li>
           </ul>
 
@@ -101,59 +107,60 @@ const showCartModal = ref(false)
 const sizes = ['XS', 'S', 'M', 'L', 'XL'];
 
 
-// const copyItem = (item: Item) => new Item(item.name, item.description, item.price, item.size, item.image)
+const createItem = (item: Omit<Item, 'type'>) => ({...item, type: "item"})
+const createCombo = (item: Omit<Combo, 'type'>) => ({...item, type: "combo"})
 
 const items: Ref<Item[]> = ref([
-  {
+  createItem({
     name: 'Cotton Polo Shirt',
     description: 'Comfortable cotton polo shirt',
     price: 550,
     size: 'XS',
     image: '/images/cotton_polo.jpg'
-  },
-  {
+  }),
+  createItem({
     name: 'Cotton Shirt',
     description: 'Lightweight cotton shirt',
     price: 350,
     size: 'XS',
     image: '/images/cotton_shirt.jpg'
-  },
-  {
+  }),
+  createItem({
     name: 'Lanyard',
     description: 'Durable lanyard for everyday use',
     price: 120,
     size: null,
     image: '/images/lanyard.jpg'
-  },
-  {
+  }),
+  createItem({
     name: 'Sublimation Jersey',
     description: 'Vibrant sublimation jersey',
     price: 350,
     size: 'XS',
     image: '/images/sublimation_shirt.png'
-  }
+  })
 ])
 const combos: Ref<Combo[]> = ref([
-  {
+  createCombo({
     name: 'Combo 1: Shirt + Lanyard',
     price: 420,
     items: [{ ...items.value[1] }, { ...items.value[2] }]
-  },
-  {
+  }),
+  createCombo({
     name: 'Combo 2: Polo + Lanyard',
     price: 620,
     items: [{ ...items.value[0] }, { ...items.value[2] }]
-  },
-  {
+  }),
+  createCombo({
     name: 'Combo 3: Polo + Shirt',
     price: 850,
     items: [{ ...items.value[0] }, { ...items.value[1] }]
-  },
-  {
+  }),
+  createCombo({
     name: 'Combo 4: Polo + Shirt + Lanyard',
     price: 900,
     items: [{ ...items.value[0] }, { ...items.value[1] }, { ...items.value[2] }]
-  }
+  })
 ])
 
 

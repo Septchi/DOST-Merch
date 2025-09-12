@@ -1,4 +1,5 @@
 export interface Item {
+  type: 'item'
   name: string,
   description: string,
   price: number,
@@ -7,18 +8,23 @@ export interface Item {
 }
 
 export interface Combo {
+  type: 'combo'
   name: string,
   price: number,
   items: Item[];
 }
 
+export type Product =  Item | Combo
+
 export interface ItemCart {
+  type: 'item'
   name: string,
   size: string,
   price: number
 }
 
 export interface ComboCart {
+  type: 'combo'
   name: string,
   price: number,
   items: ItemCart[]
