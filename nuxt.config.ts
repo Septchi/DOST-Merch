@@ -5,7 +5,12 @@ export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
   devtools: { enabled: true },
   css: ['~/assets/css/main.css'],
-
+  components: [
+    {
+      path: '~/components',
+      pathPrefix: false,
+    }
+  ],
   modules: [
     '@nuxt/content',
     '@nuxt/image',
@@ -14,6 +19,7 @@ export default defineNuxtConfig({
     '@nuxtjs/color-mode',
     '@pinia/nuxt'
   ],
+
   colorMode: {
     preference: 'light',
     fallback: 'light',
