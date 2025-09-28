@@ -14,13 +14,15 @@ export interface Combo {
   items: Item[];
 }
 
-export type Product =  Item | Combo
+export type Product = Item | Combo
 
 export interface ItemCart {
   type: 'item'
   name: string,
-  size: string,
+  size: string | null,
   price: number
+  image: string,
+  quantity: number
 }
 
 export interface ComboCart {

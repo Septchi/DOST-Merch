@@ -8,14 +8,24 @@
     <p v-if="store.count === 0" class="text-lg">Your cart is empty.</p>
     <ul v-else class="space-y-3 mb-4 max-h-64 overflow-y-auto">
       <li v-for="(product, index) in store.items" :key="index" class="flex justify-between text-lg">
-        <span v-if="product.type === 'item'">{{ product.name }} {{product.size != null ? `(${product.size})` : ''}}</span>
-        <div v-else>
-          <span>{{product.name}}:</span>
-          <div class="flex flex-col pl-2">
-            <span v-for="item in product.items">{{item.name}} {{item.size != null ? `(${item.size})` : ''}}</span>
+        <div v-if="product.type === 'item'">
+          <h1 class="font-bold">{{ product.name }}</h1>
+          <h1 class="text-sm">Size: {{ product.size }}</h1>
+          <div class="flex gap-2">
+            <UInput disabled :placeholder="product.quantity" class="max-w-8" />
+            <span>x {{ product.price }}</span>
           </div>
         </div>
-        <span class="font-semibold">₱{{product.price }}</span>
+        <div v-else>
+          <span>{{ product.name }}:</span>
+          <div class="flex flex-col pl-2">
+            <span v-for="item in product.items">{{ item.name }} {{ item.size != null ? `(${item.size})` : '' }}</span>
+          </div>
+        </div>
+        <div>
+          <span class="font-semibold">₱{{ product.price * ('quantity' in product ? product.quantity : 1) }}</span>
+          <UButton icon="i-lucide-trash-2" @click="store.remove(product)" size="md" color="error" variant="ghost" />
+        </div>
       </li>
     </ul>
 
@@ -29,10 +39,13 @@
   </div>
 </template>
 
-<script setup lang=ts>
-  import { useCartStore } from '@/stores/cart';
-  const store = useCartStore()
+<script setup lang="ts">
+import { useCartStore } from '@/stores/cart';
+import { useRouter } from 'vue-router';
+
+const store = useCartStore()
+const router = useRouter()
+
 </script>
 
-<style>
-</style>
+<style></style>
