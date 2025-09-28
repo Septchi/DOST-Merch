@@ -21,6 +21,9 @@ export default defineNuxtConfig({
     '@nuxtjs/supabase'
   ],
 
+  hud: {
+    database: true
+  },
   supabase: {
     redirect: false
   },
