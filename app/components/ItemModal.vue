@@ -9,8 +9,8 @@
       <div v-if="product.size != null">
         <h2 class="font-bold">Size:</h2>
         <div class="flex gap-2">
-          <UButton v-for="size in sizes" :key="size" :label="size" :variant="product.size === size ? 'subtle' : 'ghost'"
-            @click="product.size = size" class="rounded-lg" />
+          <UButton v-for="size in sizeMapping[product.name]" :key="size" :label="size"
+            :variant="product.size === size ? 'subtle' : 'ghost'" @click="product.size = size" class="rounded-lg" />
         </div>
       </div>
       <h2 class="font-bold">Quantity:</h2>
@@ -35,8 +35,8 @@
         <div v-if="item.size != null">
           <h2 class="font-bold">Size:</h2>
           <div class="flex gap-2">
-            <UButton v-for="size in sizes" :key="size" :label="size" :variant="item.size === size ? 'subtle' : 'ghost'"
-              @click="item.size = size" class="rounded-lg" />
+            <UButton v-for="size in sizeMapping[item.name]" :key="size" :label="size"
+              :variant="item.size === size ? 'subtle' : 'ghost'" @click="item.size = size" class="rounded-lg" />
           </div>
         </div>
       </div>
@@ -60,7 +60,12 @@ const emit = defineEmits<{
   (e: 'cart'): void
 }>()
 
-const sizes = ['XS', 'S', 'M', 'L', 'XL']
+const sizeMapping = {
+  'Cotton Polo Shirt': ['XS', 'S', 'M', 'L', 'XL'],
+  'Cotton Shirt': ['XS', 'S', 'M', 'L', 'XL', '2XL', '3XL'],
+  'Sublimation Jersey': ['XS', 'S', 'M', 'L', 'XL'],
+  'Lanyard': [null]
+};
 const currSize = ref('XS');
 const qty = ref<number>(1)
 watch(() => props.product, () => qty.value = 1)

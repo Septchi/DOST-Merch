@@ -75,7 +75,9 @@ import { ref } from 'vue'
 import * as z from 'zod'
 import { useCartStore } from '@/stores/cart';
 import type { FormSubmitEvent } from '@nuxt/ui'
+import { useRouter } from 'vue-router';
 
+const router = useRouter()
 const store = useCartStore();
 const toast = useToast();
 
@@ -136,6 +138,8 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
       color: valid ? "success" : "error",
       icon: valid ? "i-heroicons-check-circle" : "i-heroicons-x-circle",
     });
+    store.clear();
+    router.push('/')
   } catch (err) {
     console.error("Failed to Send Order:", err);
     toast.add({
